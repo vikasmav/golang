@@ -4,6 +4,8 @@
 package kafkaeventstrategy
 
 import (
+	"fmt"
+	
 	"vie.git.bwinparty.com/golang/dcexchange/event"
 	"vie.git.bwinparty.com/golang/messaging/kafka/client"
 	"vie.git.bwinparty.com/golang/util/instance"
@@ -64,10 +66,12 @@ func (kes *kafkaEventStrategy) Events() chan *event.Event {
 func (kes *kafkaEventStrategy) eventProcessor() {
 	for event := range kes.events {
 
-		jsonBytes, jsonErr := json.Marshal(event.Data)
+		//jsonBytes, jsonErr := json.Marshal(event.Data)
+		fmt.Println(event.Data)
 
 		var key []byte = nil
 		if kes.options.PartitionConsistency {
+		fmt.Println("IN KES>OPTIONS IF")
 			key = []byte(event.Key)
 			jsonBytes, jsonErr = json.Marshal(event)
 		}
@@ -80,7 +84,7 @@ func (kes *kafkaEventStrategy) eventProcessor() {
 		} else {
 
 			if kes.options.PartitionConsistency {
-				kes.publisher.Messages() <- kfc.NewMsgWithKey([]byte(key), jsonBytes)
+				kes.publisher.Messages() <- kfc.NewMsgWithKey([]byte(key), []byte(event.Data))
 				log.WithFields(&log.Fields{
 					"key":     key,
 					"event":   string(jsonBytes),
