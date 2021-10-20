@@ -1,4 +1,4 @@
-module vie.git.bwinparty.com/golang/dcexchange/strategy/kafka-event-strategy
+module github.com/vikasmav/golang/dcexchange/strategy/kafka-event-strategy
 
 go 1.13
 
