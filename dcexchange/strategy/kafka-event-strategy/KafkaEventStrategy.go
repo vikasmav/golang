@@ -4,6 +4,8 @@
 package kafkaeventstrategy
 
 import (
+	"fmt"
+	
 	"vie.git.bwinparty.com/golang/dcexchange/event"
 	"vie.git.bwinparty.com/golang/messaging/kafka/client"
 	"vie.git.bwinparty.com/golang/util/instance"
@@ -64,10 +66,29 @@ func (kes *kafkaEventStrategy) Events() chan *event.Event {
 func (kes *kafkaEventStrategy) eventProcessor() {
 	for event := range kes.events {
 
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
 		jsonBytes, jsonErr := json.Marshal(event.Data)
-
+		fmt.Println(" : JSON BYTES : " + string(jsonBytes))
+		jsonBytes = []byte(event.Data)
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : STRING BYTES : " + string(jsonBytes))
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		
 		var key []byte = nil
 		if kes.options.PartitionConsistency {
+			fmt.Println("1. : kes.options.PartitionConsistency : TRUE")
 			key = []byte(event.Key)
 			jsonBytes, jsonErr = json.Marshal(event)
 		}
@@ -80,6 +101,7 @@ func (kes *kafkaEventStrategy) eventProcessor() {
 		} else {
 
 			if kes.options.PartitionConsistency {
+				fmt.Println("2. : kes.options.PartitionConsistency : TRUE")
 				kes.publisher.Messages() <- kfc.NewMsgWithKey([]byte(key), jsonBytes)
 				log.WithFields(&log.Fields{
 					"key":     key,
@@ -87,6 +109,7 @@ func (kes *kafkaEventStrategy) eventProcessor() {
 					"useCase": "EVENT_PUBLISHED",
 				}).Info("")
 			} else {
+				fmt.Println("3. : kes.options.PartitionConsistency : FALSE")
 				kes.publisher.Messages() <- kfc.NewMsg(jsonBytes)
 
 				log.WithFields(&log.Fields{
@@ -96,5 +119,11 @@ func (kes *kafkaEventStrategy) eventProcessor() {
 			}
 
 		}
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : : ")
+		fmt.Println(" : END : ")
 	}
 }
