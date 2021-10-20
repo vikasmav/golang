@@ -68,7 +68,7 @@ func (kes *kafkaEventStrategy) eventProcessor() {
 
 		//jsonBytes, jsonErr := json.Marshal(event.Data)
 		fmt.Println(event.Data)
-
+asdasdadasdasd
 		var key []byte = nil
 		if kes.options.PartitionConsistency {
 		fmt.Println("IN KES>OPTIONS IF")
